@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app:
+    image: spring-boot-docker-secrets:latest
+    ports:
+      - 3000:8080
+    secrets:
+      - source: file-secret
+        target: super-important-secret
+
+secrets:
+  file-secret:
+    file: ./data/super-important-secret.txt
