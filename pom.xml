@@ -9,13 +9,15 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.fynnian</groupId>
-    <artifactId>spring-docker-secrets</artifactId>
+    <artifactId>spring-boot-docker-secrets</artifactId>
     <version>1.0.0</version>
-    <name>spring-docker-secrets</name>
-    <description>Demo project for Spring Boot</description>
+    <name>spring-boot-docker-secrets</name>
+    <description>Example project for Spring Boot with Docker secrets</description>
     <properties>
         <java.version>11</java.version>
         <kotlin.version>1.5.10</kotlin.version>
+        <docker.plugin.version>0.36.0</docker.plugin.version>
+        <docker.buildArg.jarName>${project.build.finalName}</docker.buildArg.jarName>
     </properties>
     <dependencies>
         <dependency>
@@ -73,6 +75,33 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker.plugin.version}</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>${project.artifactId}</alias>
+                            <name>%a</name>
+                            <build>
+                                <dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+                                <assembly>
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
